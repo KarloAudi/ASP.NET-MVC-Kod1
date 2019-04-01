@@ -1,0 +1,91 @@
+﻿@model IPagedList<TestProject9.Models.BindTablesClass>
+@{
+    ViewBag.Title = "Main Page";
+}
+
+@using PagedList.Mvc;
+@using PagedList;
+
+<style>
+    body {
+        font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+
+    table tr th {
+        font-size: 18px;
+    }
+
+    .heading-custom {
+        padding: 3px 7px;
+        background: #337ab7;
+        color: #fff;
+        transition: 0.1s;
+    }
+
+    .heading-custom:hover {
+        background: #3a91cb;
+        color: #fff;
+        text-decoration: none;
+    }
+
+    .createnew-btn {
+        color: #fff;
+        background: #333;
+        padding: 5px 10px;
+    }
+
+    .createnew-btn:hover {
+        color: #fff;
+        background: #444;
+    }
+</style>
+
+<center style="min-height: 600px;">
+    <h2 class="bg-primary" style="padding: 10px;">Vehicle CRUD List</h2>
+
+    <div class="container">
+        <div class="row pull-left">
+            <div style="margin: 20px 0px;">
+                @using (Html.BeginForm("Index", "Vehicle", FormMethod.Get))
+                {
+                    @Html.TextBox("searching")
+                    <input type="submit" value="Filter" class="btn-toolbar" style="padding: 1px 25px;" />
+                }
+            </div>
+        </div>
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>Id</th>
+            <th>Make Name</th>
+            <th>Model Id</th>
+            <th>Make Id</th>
+            <th>Model Name</th>
+            <th>Make Abrv</th>
+            <th>Model Abrv</th>
+
+            <td>CRUD Operations</td>
+        </tr>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.makeDetails.Id)</td>
+            <td>@Html.DisplayFor(modelItem => item.makeDetails.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.modelDetails.Id)</td>
+            <td>@Html.DisplayFor(modelItem => item.modelDetails.MakeId)</td>
+            <td>@Html.DisplayFor(modelItem => item.modelDetails.Name)</td>
+            <td>@Html.DisplayFor(modelItem => item.makeDetails.Abrv)</td>
+            <td>@Html.DisplayFor(modelItem => item.modelDetails.Abrv)</td>
+
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.makeDetails.Id}) |
+                @Html.ActionLink("Details", "Details", new { id = item.makeDetails.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.makeDetails.Id })
+            </td>
+        </tr>
+        }
+    </table>
+</center>
+
+@Html.PagedListPager(Model, i => Url.Action("Index", "Vehicle", new { i, search = Request.QueryString["search"] }))
